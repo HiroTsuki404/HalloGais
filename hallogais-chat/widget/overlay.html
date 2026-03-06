@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HalloGais Chat Overlay</title>
+    <!--
+    ================================================================
+    HALLOGAIS CHAT OVERLAY — OBS Browser Source
+    ================================================================
+    Ukuran Browser Source di OBS: 400 x 600 px
+
+    URL Parameters:
+      ?theme=clean-gais     → Tema Clean (default)
+      ?theme=gaming-gais    → Tema Gaming Neon
+      ?theme=cute-gais      → Tema Cute Kawaii
+      ?channel=NamaChannel  → Nama channel di header
+      ?demo=1               → Mode demo (pesan sampel otomatis)
+    ================================================================
+  -->
+    <link id="theme-css" rel="stylesheet" href="" />
+</head>
+
+<body>
+
+    <!-- Opsional: Header Channel -->
+    <div id="overlay-header" style="display:none;">
+        <img id="header-logo" src="assets/logo.png" alt="logo" />
+        <span id="header-channel">Channel</span>
+        <span id="header-live">● LIVE</span>
+    </div>
+
+    <!-- Area Chat (pesan muncul di sini) -->
+    <div id="chat-feed" role="log" aria-live="polite"></div>
+
+    <script>
+        /* ============================================================
+           KONFIGURASI
+        ============================================================ */
+        const params = new URLSearchParams(window.location.search);
+        const theme = params.get('theme') || 'clean-gais';
+        const channel = params.get('channel') || '';
+        const demo = params.get('demo') === '1';
+
+        // Validasi tema
+        const THEMES = ['clean-gais', 'gaming-gais', 'cute-gais'];
+        const safeTheme = THEMES.includes(theme) ? theme : 'clean-gais';
+        document.getElementById('theme-css').href = `themes/${safeTheme}.css`;
+
+        // Tampilkan header jika ada channel
+        if (channel) {
+            const hdr = document.getElementById('overlay-header');
+            document.getElementById('header-channel').textContent = decodeURIComponent(channel);
+            hdr.style.display = 'flex';
+        }
+
+        /* ============================================================
+           UTILITAS
+        ============================================================ */
+        const feed = document.getElementById('chat-feed');
+
+        // Warna username deterministik dari nama
+        function nameToColor(name) {
+            const palette = [
+                '#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4FD2F8',
+                '#74C0FC', '#DA77F2', '#F783AC', '#63E6BE', '#A9E34B',
+            ];
+            let hash = 0;
+            for (let c of name) hash = (hash * 31 + c.charCodeAt(0)) & 0xFFFF;
+            return palette[hash % palette.length];
+        }
+
+        // Badge HTML
+        function badgeHtml(badges) {
+            return badges.map(b => `<span class="badge badge-${b}" title="${b}"></span>`).join('');
+        }
+
+        /* ============================================================
+           TAMBAH PESAN KE FEED
+           @param {object} msg - { user, color, badges, text, emotes }
+        ============================================================ */
+        function addMessage({ user, color, badges = [], text }) {
+            const el = document.createElement('div');
+            el.className = 'chat-msg new';
+            el.innerHTML = `
+        <div class="msg-meta">
+          ${badgeHtml(badges)}
+          <span class="msg-user" style="color:${color || nameToColor(user)}">${escHtml(user)}</span>
+          <span class="msg-colon">:</span>
+        </div>
+        <span class="msg-text">${escHtml(text)}</span>
+      `;
+            feed.appendChild(el);
+
+            // Hapus kelas 'new' setelah 1 frame (trigger animasi CSS)
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => el.classList.remove('new'));
+            });
+
+            // Batas max pesan yang tampil (biar tidak menumpuk)
+            const MAX = 20;
+            while (feed.children.length > MAX) {
+                feed.children[0].classList.add('removing');
+                setTimeout(() => {
+                    if (feed.children[0]) feed.removeChild(feed.children[0]);
+                }, 400);
+            }
+
+            // Auto fade-out setelah 25 detik
+            setTimeout(() => {
+                el.classList.add('removing');
+                setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 400);
+            }, 25000);
+        }
+
+        function escHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        /* ============================================================
+           DEMO MODE — Pesan sampel otomatis
+        ============================================================ */
+        if (demo) {
+            const sampleMessages = [
+                { user: 'Nakamura_', badges: ['moderator'], text: 'Selamat datang di stream! 🎉' },
+                { user: 'XanderPlay', badges: [], text: 'Wih baru mulai nih?' },
+                { user: 'SakuraChan', badges: ['subscriber'], text: 'Halo halo! udah lama gak nonton 💖' },
+                { user: 'DevilGamer', badges: [], text: 'F F F gak sabar gaes' },
+                { user: 'Moderator7', badges: ['moderator'], text: 'Spam dilarang ya guys!' },
+                { user: 'LunaWatcher', badges: ['subscriber'], text: 'Tema overlaynya keren banget omg 🔥' },
+                { user: 'ProStream99', badges: [], text: 'gaming time gaminggggg' },
+                { user: 'CuteKoala__', badges: ['subscriber'], text: 'GG GG streamer terbaik!' },
+                { user: 'RandomViewer', badges: [], text: 'Lagi main game apa nih?' },
+                { user: 'HalloGais', badges: ['moderator', 'subscriber'], text: 'Makasih udah pake tema HalloGais! 💙' },
+                { user: 'ShadowNinja', badges: [], text: 'PogChamp PogChamp PogChamp' },
+                { user: 'StarPrincess', badges: ['subscriber'], text: 'stream hari ini vibes-nya bagus banget~~' },
+                { user: 'GigaChad404', badges: [], text: 'LUL LUL wkwkwkwk' },
+                { user: 'OtakuKing88', badges: [], text: 'Mau main sampe jam berapa nih?' },
+                { user: 'NightOwlYT', badges: ['subscriber'], text: 'udah follow btw hehe 👀' },
+            ];
+
+            let idx = 0;
+            function sendDemo() {
+                const m = sampleMessages[idx % sampleMessages.length];
+                addMessage(m);
+                idx++;
+                // Jeda acak 1.5 – 4 detik antar pesan
+                setTimeout(sendDemo, 1500 + Math.random() * 2500);
+            }
+            setTimeout(sendDemo, 800);
+        }
+
+        /* ============================================================
+           INTEGRASI EXTERNAL (StreamElements / Streamlabs)
+           Aktifkan bagian ini jika ingin connect ke live chat sungguhan
+           via StreamElements Widget Event Listener.
+        ============================================================ */
+        // window.addEventListener('onEventReceived', (obj) => {
+        //   const data = obj.detail.event;
+        //   if (data.type !== 'message') return;
+        //   addMessage({
+        //     user:   data.data.displayName,
+        //     color:  data.data.displayColor,
+        //     badges: Object.keys(data.data.badges || {}),
+        //     text:   data.data.text,
+        //   });
+        // });
+    </script>
+</body>
+
+</html>

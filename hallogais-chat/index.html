@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="HalloGais Chat Widget — Katalog tema chat overlay untuk stream & website kamu." />
-    <title>HalloGais Chat Widget — Katalog</title>
+    <meta name="description"
+        content="HalloGais — Custom CSS Chat Overlay untuk OBS Live Stream. Cocok untuk YouTube, Twitch, dan StreamElements." />
+    <title>HalloGais — OBS Chat Overlay</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <style>
-        /* ── RESET & TOKEN ── */
         *,
         *::before,
         *::after {
@@ -28,7 +28,7 @@
             --text: #f1f5f9;
             --muted: #94a3b8;
             --success: #10b981;
-            --radius: 16px;
+            --r: 14px;
         }
 
         body {
@@ -38,57 +38,77 @@
             min-height: 100vh;
         }
 
-        /* ── NAVBAR ── */
+        /* ── NAV ── */
         nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 48px;
+            padding: 18px 48px;
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(12px);
             z-index: 100;
         }
 
-        .nav-brand {
+        .brand {
             font-weight: 800;
             font-size: 18px;
             color: var(--p2);
-            letter-spacing: -0.3px;
         }
 
-        .nav-brand span {
+        .brand span {
             color: var(--text);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 9px 20px;
+            background: var(--p);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+            transform: scale(1.02);
+        }
+
+        .btn-sm {
+            padding: 7px 14px;
+            font-size: 13px;
         }
 
         /* ── HERO ── */
         .hero {
             text-align: center;
-            padding: 90px 24px 60px;
-            background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(79, 70, 229, 0.25), transparent);
+            padding: 80px 24px 56px;
+            background: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(79, 70, 229, 0.22), transparent);
         }
 
         .hero-badge {
             display: inline-block;
-            padding: 5px 14px;
-            background: rgba(79, 70, 229, 0.2);
-            border: 1px solid rgba(129, 140, 248, 0.4);
+            padding: 4px 14px;
+            margin-bottom: 20px;
+            background: rgba(79, 70, 229, 0.18);
+            border: 1px solid rgba(129, 140, 248, 0.35);
             border-radius: 99px;
             font-size: 12px;
             font-weight: 600;
             color: var(--p2);
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
         }
 
         .hero h1 {
-            font-size: clamp(32px, 5vw, 56px);
+            font-size: clamp(28px, 5vw, 52px);
             font-weight: 800;
             letter-spacing: -1px;
             line-height: 1.15;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .hero h1 span {
@@ -98,122 +118,173 @@
         .hero p {
             font-size: 17px;
             color: var(--muted);
-            max-width: 520px;
-            margin: 0 auto 36px;
+            max-width: 500px;
+            margin: 0 auto 32px;
             line-height: 1.7;
         }
 
-        .hero-cta {
-            display: inline-block;
-            padding: 13px 30px;
-            background: var(--p);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 15px;
-            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.35);
+        .hero-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .hero-cta:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text);
         }
 
-        /* ── SECTION HEADER ── */
-        .section {
-            padding: 60px 24px;
-            max-width: 1100px;
+        .btn-outline:hover {
+            border-color: var(--p2);
+            background: rgba(79, 70, 229, 0.08);
+            transform: scale(1.02);
+        }
+
+        /* ── SECTION ── */
+        section {
+            padding: 56px 24px;
+            max-width: 1080px;
             margin: 0 auto;
         }
 
-        .section-title {
-            font-size: 26px;
+        .sec-title {
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
-        .section-sub {
+        .sec-sub {
             color: var(--muted);
-            font-size: 15px;
-            margin-bottom: 36px;
+            font-size: 14px;
+            margin-bottom: 32px;
         }
 
         /* ── TEMA GRID ── */
-        .grid {
+        .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 22px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
 
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: var(--r);
             overflow: hidden;
             transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
         }
 
         .card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-5px);
             border-color: var(--p);
-            box-shadow: 0 12px 40px rgba(79, 70, 229, 0.18);
+            box-shadow: 0 10px 36px rgba(79, 70, 229, 0.16);
         }
 
-        .card-preview {
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
+        /* Preview OBS simulasi */
+        .card-obs {
+            height: 200px;
             position: relative;
             overflow: hidden;
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 12px;
+            gap: 6px;
         }
 
-        .card-preview.clean {
-            background: linear-gradient(135deg, #1e1b4b, #312e81);
+        .fake-msg {
+            border-radius: 8px;
+            padding: 7px 11px;
+            font-size: 12px;
+            display: flex;
+            gap: 5px;
+            align-items: baseline;
+            flex-wrap: wrap;
         }
 
-        .card-preview.gaming {
-            background: linear-gradient(135deg, #0a0a14, #0d2b1a);
+        .clean .card-obs {
+            background: #0a0a14;
         }
 
-        .card-preview.cute {
-            background: linear-gradient(135deg, #4a0028, #7c003c);
+        .clean .fake-msg {
+            background: rgba(15, 15, 25, 0.82);
+            border-left: 3px solid #4F46E5;
         }
 
-        .card-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            inset: 0;
-            opacity: 0;
+        .clean .fake-user {
+            color: #74C0FC;
+            font-weight: 700;
+            font-size: 12px;
         }
 
-        .card-preview img.loaded {
-            opacity: 1;
+        .clean .fake-text {
+            color: #e0e0e0;
+            font-size: 12px;
+        }
+
+        .gaming .card-obs {
+            background: #060610;
+        }
+
+        .gaming .fake-msg {
+            background: rgba(10, 10, 20, 0.85);
+            border-left: 3px solid #00FF87;
+            font-family: monospace;
+        }
+
+        .gaming .fake-user {
+            color: #00FF87;
+            font-weight: 700;
+            font-size: 12px;
+            text-shadow: 0 0 6px #00FF87;
+        }
+
+        .gaming .fake-text {
+            color: #a0ffd0;
+            font-size: 12px;
+        }
+
+        .cute .card-obs {
+            background: #1a0010;
+        }
+
+        .cute .fake-msg {
+            background: rgba(40, 10, 28, 0.82);
+            border-radius: 12px;
+            border: 1.5px solid rgba(255, 107, 174, 0.3);
+        }
+
+        .cute .fake-user {
+            color: #FF6BAE;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .cute .fake-text {
+            color: #ffd6ee;
+            font-size: 12px;
         }
 
         .card-body {
-            padding: 22px;
+            padding: 18px;
         }
 
-        .card-tag {
+        .tag {
             display: inline-block;
             font-size: 11px;
             font-weight: 600;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.7px;
             text-transform: uppercase;
-            padding: 3px 10px;
+            padding: 2px 9px;
             border-radius: 99px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .tag-clean {
-            background: rgba(79, 70, 229, 0.2);
+            background: rgba(79, 70, 229, 0.18);
             color: #818cf8;
         }
 
@@ -228,78 +299,182 @@
         }
 
         .card-body h3 {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .card-body p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            line-height: 1.55;
+        }
+
+        .card-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ── CARA PASANG OBS ── */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--p);
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-body h4 {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .step-body p {
             font-size: 14px;
             color: var(--muted);
-            margin-bottom: 18px;
             line-height: 1.6;
         }
 
-        .btn {
+        .code-inline {
             display: inline-block;
-            padding: 9px 20px;
-            background: var(--p);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: background 0.2s, transform 0.15s;
+            background: rgba(79, 70, 229, 0.18);
+            color: var(--p2);
+            border-radius: 5px;
+            padding: 1px 7px;
+            font-family: monospace;
+            font-size: 13px;
         }
 
-        .btn:hover {
-            background: #4338ca;
-            transform: scale(1.02);
+        /* ── CSS STREAMELEMENTS ── */
+        .se-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            overflow: hidden;
+        }
+
+        .se-top {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .se-top select {
+            background: var(--bg);
+            color: var(--text);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .se-top select:focus {
+            border-color: var(--p);
+        }
+
+        #se-css-output {
+            display: block;
+            width: 100%;
+            height: 180px;
+            background: #080e1e;
+            color: #a5b4fc;
+            border: none;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+            outline: none;
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1.5px solid rgba(16, 185, 129, 0.4);
+            color: var(--success);
+            border-radius: 7px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .copy-btn.copied {
+            color: #fff;
+            background: var(--success);
+            border-color: var(--success);
         }
 
         /* ── LINK GENERATOR ── */
-        .generator {
+        .gen-box {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 36px 40px;
-            margin-top: 60px;
+            border-radius: var(--r);
+            padding: 28px 32px;
         }
 
-        .generator h2 {
-            font-size: 22px;
+        .gen-box h2 {
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: 6px;
         }
 
-        .generator>p {
+        .gen-box>p {
             color: var(--muted);
-            font-size: 14px;
-            margin-bottom: 28px;
+            font-size: 13px;
+            margin-bottom: 22px;
         }
 
         .gen-fields {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: 14px;
+            margin-bottom: 18px;
         }
 
         .field label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 7px;
+            margin-bottom: 6px;
         }
 
         .field input,
         .field select {
             width: 100%;
-            padding: 11px 14px;
-            border-radius: 10px;
+            padding: 10px 12px;
+            border-radius: 9px;
             border: 1.5px solid var(--border);
             background: var(--bg);
             color: var(--text);
@@ -314,82 +489,53 @@
             border-color: var(--p);
         }
 
-        .field select option {
-            background: var(--surface);
-        }
-
         .result-box {
             background: rgba(16, 185, 129, 0.07);
             border: 1.5px solid rgba(16, 185, 129, 0.25);
-            border-radius: 10px;
-            padding: 14px 18px;
+            border-radius: 9px;
+            padding: 13px 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-top: 4px;
+            gap: 10px;
         }
 
         .result-box span {
             flex: 1;
             color: var(--success);
             font-family: monospace;
-            font-size: 13px;
+            font-size: 12px;
             word-break: break-all;
-        }
-
-        .copy-btn {
-            background: none;
-            border: 1.5px solid rgba(16, 185, 129, 0.4);
-            color: var(--success);
-            border-radius: 7px;
-            padding: 6px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-
-        .copy-btn:hover {
-            background: rgba(16, 185, 129, 0.12);
-        }
-
-        .copy-btn.copied {
-            color: #fff;
-            background: var(--success);
-            border-color: var(--success);
         }
 
         /* ── FOOTER ── */
         footer {
             text-align: center;
-            padding: 40px 24px;
+            padding: 36px 24px;
             color: var(--muted);
             font-size: 13px;
             border-top: 1px solid var(--border);
-            margin-top: 80px;
+            margin-top: 60px;
         }
 
         footer strong {
             color: var(--p2);
         }
 
-        /* ── RESPONSIVE ── */
-        @media (max-width: 620px) {
+        @media (max-width: 600px) {
             nav {
-                padding: 16px 20px;
-            }
-
-            .hero {
-                padding: 60px 16px 40px;
-            }
-
-            .generator {
-                padding: 24px 20px;
+                padding: 14px 16px;
             }
 
             .gen-fields {
                 grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 56px 16px 36px;
+            }
+
+            .gen-box {
+                padding: 20px 16px;
             }
         }
     </style>
@@ -399,138 +545,249 @@
 
     <!-- NAV -->
     <nav>
-        <div class="nav-brand">Hallo<span>Gais</span> Chat</div>
-        <a href="#generator" class="btn" style="padding:8px 18px;font-size:13px;">Generate Link →</a>
+        <div class="brand">Hallo<span>Gais</span></div>
+        <div style="display:flex;gap:10px;">
+            <a href="#cara-pasang" class="btn btn-sm btn-outline">Cara Pasang OBS</a>
+            <a href="#generator" class="btn btn-sm">Generate Link</a>
+        </div>
     </nav>
 
     <!-- HERO -->
-    <section class="hero">
-        <div class="hero-badge">✨ Widget Chat Kustom</div>
-        <h1>Chat Widget <span>Keren</span><br>Buat Stream & Website</h1>
-        <p>Pilih tema favoritmu, kustomisasi dengan nama tokomu, dan dapatkan link siap pakai dalam detik.</p>
-        <a href="#themes" class="hero-cta">Lihat Semua Tema ↓</a>
-    </section>
+    <div class="hero">
+        <div class="hero-badge">🎮 OBS Chat Overlay</div>
+        <h1>Custom Chat Overlay<br><span>Buat Live Stream Kamu</span></h1>
+        <p>Bikin tampilan chat YouTube & Twitch kamu jadi keren dengan tema CSS eksklusif. Pasang di OBS dalam 1 menit.
+        </p>
+        <div class="hero-btns">
+            <a href="#themes" class="btn">Lihat Tema →</a>
+            <a href="#cara-pasang" class="btn btn-outline">Cara Pasang OBS</a>
+        </div>
+    </div>
 
-    <!-- TEMA GRID -->
-    <div class="section" id="themes">
-        <div class="section-title">Pilih Tema</div>
-        <div class="section-sub">Klik "Demo Tema" untuk melihat langsung tampilan widget-nya.</div>
+    <!-- TEMA -->
+    <section id="themes">
+        <div class="sec-title">Pilih Tema</div>
+        <div class="sec-sub">Klik "Preview Demo" untuk lihat simulasi chat overlay langsung di browser.</div>
+        <div class="grid-3">
 
-        <div class="grid">
-
-            <!-- Clean Gais -->
-            <div class="card">
-                <div class="card-preview clean">🧼</div>
+            <div class="card clean">
+                <div class="card-obs">
+                    <div class="fake-msg"><span class="fake-user">Moderator7</span><span
+                            style="color:#6b7280">:</span><span class="fake-text">Halo semuanya! 🎉</span></div>
+                    <div class="fake-msg"><span class="fake-user">XanderPlay</span><span
+                            style="color:#6b7280">:</span><span class="fake-text">Stream bagus nih!</span></div>
+                    <div class="fake-msg"><span class="fake-user">SakuraChan</span><span
+                            style="color:#6b7280">:</span><span class="fake-text">GG GG 💙</span></div>
+                </div>
                 <div class="card-body">
-                    <div class="card-tag tag-clean">Profesional</div>
+                    <div class="tag tag-clean">Profesional</div>
                     <h3>Clean Gais</h3>
-                    <p>Tampilan bersih, minimalis, dan elegan. Cocok untuk toko umum, brand profesional, atau bisnis
-                        apapun.</p>
-                    <a href="widget/chat.html?theme=clean-gais" target="_blank" class="btn">Demo Tema →</a>
+                    <p>Bersih, elegan, gelap. Cocok untuk semua jenis stream.</p>
+                    <div class="card-btns">
+                        <a href="widget/overlay.html?theme=clean-gais&demo=1" target="_blank" class="btn btn-sm">Preview
+                            Demo</a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Gaming Gais -->
-            <div class="card">
-                <div class="card-preview gaming">🎮</div>
+            <div class="card gaming">
+                <div class="card-obs">
+                    <div class="fake-msg"><span class="fake-user">ShadowNinja</span><span
+                            style="color:#4a9">:</span><span class="fake-text">PogChamp!!</span></div>
+                    <div class="fake-msg"><span class="fake-user">GigaChad404</span><span
+                            style="color:#4a9">:</span><span class="fake-text">LUL LUL wkwkwk</span></div>
+                    <div class="fake-msg"><span class="fake-user">HalloGais</span><span style="color:#4a9">:</span><span
+                            class="fake-text">GAMING TIMEEE 🔥</span></div>
+                </div>
                 <div class="card-body">
-                    <div class="card-tag tag-gaming">Dark / Neon</div>
+                    <div class="tag tag-gaming">Neon / Gaming</div>
                     <h3>Gaming Gais</h3>
-                    <p>Mode gelap bergaya neon hijau futuristik. Pas banget buat streamer, toko gaming, atau brand
-                        teknologi.</p>
-                    <a href="widget/chat.html?theme=gaming-gais" target="_blank" class="btn">Demo Tema →</a>
+                    <p>Dark mode neon hijau futuristik. Pas buat streamer gaming.</p>
+                    <div class="card-btns">
+                        <a href="widget/overlay.html?theme=gaming-gais&demo=1" target="_blank"
+                            class="btn btn-sm">Preview Demo</a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Cute Gais -->
-            <div class="card">
-                <div class="card-preview cute">🌸</div>
+            <div class="card cute">
+                <div class="card-obs">
+                    <div class="fake-msg"><span class="fake-user">StarPrincess</span><span
+                            style="color:#d98bae">:</span><span class="fake-text">kawaii banget 🌸</span></div>
+                    <div class="fake-msg"><span class="fake-user">LunaWatcher</span><span
+                            style="color:#d98bae">:</span><span class="fake-text">OMGG suka tema ini 💖</span></div>
+                    <div class="fake-msg"><span class="fake-user">CuteKoala__</span><span
+                            style="color:#d98bae">:</span><span class="fake-text">GG streamer! 🎀</span></div>
+                </div>
                 <div class="card-body">
-                    <div class="card-tag tag-cute">Kawaii / Pastel</div>
+                    <div class="tag tag-cute">Kawaii / Pastel</div>
                     <h3>Cute Gais</h3>
-                    <p>Warna pastel pink manis bergaya kawaii. Ideal untuk fashion wanita, toko aksesori, atau kosmetik.
-                    </p>
-                    <a href="widget/chat.html?theme=cute-gais" target="_blank" class="btn">Demo Tema →</a>
+                    <p>Pink pastel kawaii dengan animasi bounce. Cocok untuk vtuber & cewek streamer.</p>
+                    <div class="card-btns">
+                        <a href="widget/overlay.html?theme=cute-gais&demo=1" target="_blank" class="btn btn-sm">Preview
+                            Demo</a>
+                    </div>
                 </div>
             </div>
 
         </div>
-    </div>
+    </section>
+
+    <!-- CARA PASANG OBS -->
+    <section id="cara-pasang"
+        style="background:rgba(30,41,59,0.5);max-width:100%;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+        <div style="max-width:780px;margin:0 auto;">
+            <div class="sec-title">⚙️ Cara Pasang di OBS</div>
+            <div class="sec-sub">Selesai dalam kurang dari 1 menit.</div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-body">
+                        <h4>Generate link overlay kamu</h4>
+                        <p>Scroll ke bawah ke bagian <strong>Link Generator</strong>, isi nama channel dan pilih tema,
+                            salin link yang muncul.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-body">
+                        <h4>Buka OBS Studio</h4>
+                        <p>Di panel <strong>Sources</strong>, klik tombol <strong>+</strong> → pilih <strong>Browser
+                                Source</strong>.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-body">
+                        <h4>Paste link overlay</h4>
+                        <p>Tempel link tadi ke kolom <span class="code-inline">URL</span>. Set ukuran: <span
+                                class="code-inline">Width: 400</span> &nbsp;<span class="code-inline">Height:
+                                600</span>. Centang <strong>Shutdown source when not visible</strong>.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-body">
+                        <h4>Aktifkan Chroma Key / Transparan</h4>
+                        <p>Klik kanan Browser Source → <strong>Filters</strong> → tambah <strong>Color
+                                Correction</strong> atau gunakan filter <strong>Chroma Key</strong> jika perlu.
+                            Background overlay sudah transparan otomatis.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div class="step-body">
+                        <h4>Hubungkan ke StreamElements (opsional)</h4>
+                        <p>Untuk menampilkan chat live sungguhan dari YouTube/Twitch, gunakan <strong>StreamElements
+                                Widget</strong> dan tempel CSS dari seksi di bawah ke editor custom CSS-nya.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSS STREAMELEMENTS -->
+    <section id="css-se" style="max-width:780px;margin:0 auto;">
+        <div class="sec-title">🎨 CSS untuk StreamElements</div>
+        <div class="sec-sub">Pilih tema → salin CSS → paste ke StreamElements Chat Widget → simpan.</div>
+        <div class="se-block">
+            <div class="se-top">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <label style="font-size:13px;font-weight:600;">Pilih Tema:</label>
+                    <select id="se-theme-select" onchange="loadSeCss()">
+                        <option value="clean-gais">Clean Gais</option>
+                        <option value="gaming-gais">Gaming Gais</option>
+                        <option value="cute-gais">Cute Gais</option>
+                    </select>
+                </div>
+                <button class="copy-btn" id="se-copy-btn" onclick="copySeCss()">Salin CSS</button>
+            </div>
+            <textarea id="se-css-output" readonly>Memuat...</textarea>
+        </div>
+    </section>
 
     <!-- LINK GENERATOR -->
-    <div class="section" id="generator">
-        <div class="generator">
+    <section id="generator" style="max-width:780px;margin:20px auto 0;">
+        <div class="gen-box">
             <h2>🔗 Link Generator</h2>
-            <p>Isi nama toko dan pilih tema — link langsung otomatis terbuat untukmu.</p>
-
+            <p>Hasilkan link Browser Source OBS kamu dalam sekejap.</p>
             <div class="gen-fields">
                 <div class="field">
-                    <label for="in-store">Nama Toko / Channel</label>
-                    <input type="text" id="in-store" placeholder="Contoh: GameZone ID" />
+                    <label for="in-channel">Nama Channel</label>
+                    <input type="text" id="in-channel" placeholder="Contoh: GameZoneID" />
                 </div>
                 <div class="field">
-                    <label for="in-theme">Tema Chat</label>
+                    <label for="in-theme">Tema</label>
                     <select id="in-theme">
-                        <option value="clean-gais">Clean Gais — Profesional</option>
-                        <option value="gaming-gais">Gaming Gais — Dark/Neon</option>
-                        <option value="cute-gais">Cute Gais — Kawaii</option>
+                        <option value="clean-gais">Clean Gais</option>
+                        <option value="gaming-gais">Gaming Gais</option>
+                        <option value="cute-gais">Cute Gais</option>
                     </select>
                 </div>
             </div>
-
             <div class="result-box">
-                <span id="final-link">Isi nama toko di atas untuk generate link...</span>
-                <button class="copy-btn" id="copy-btn" onclick="copyLink()">Salin</button>
+                <span id="final-link">Isi nama channel di atas...</span>
+                <button class="copy-btn" id="link-copy-btn" onclick="copyLink()">Salin</button>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- FOOTER -->
     <footer>
-        <p>Dibuat dengan ❤️ oleh <strong>HalloGais</strong> · Chat Widget v1.0</p>
+        <p>Dibuat dengan ❤️ oleh <strong>HalloGais</strong> · OBS Chat Overlay v2.0</p>
     </footer>
 
     <script>
-        const inStore = document.getElementById('in-store');
+        /* ── Link Generator ── */
+        const inChannel = document.getElementById('in-channel');
         const inTheme = document.getElementById('in-theme');
         const finalLink = document.getElementById('final-link');
-        const copyBtn = document.getElementById('copy-btn');
 
-        function getBaseUrl() {
-            // Ambil URL folder ini (hapus 'index.html' jika ada)
+        function getBase() {
             const href = window.location.href.split('?')[0].replace(/\/?$/, '/');
-            return href.endsWith('index.html')
-                ? href.replace('index.html', '')
-                : href;
+            return href.endsWith('index.html') ? href.replace('index.html', '') : href;
         }
-
         function updateLink() {
-            const store = inStore.value.trim();
+            const ch = inChannel.value.trim();
             const theme = inTheme.value;
-            const base = getBaseUrl() + 'widget/chat.html';
-            const params = new URLSearchParams({ theme });
-            if (store) params.set('store', store);
-            finalLink.textContent = `${base}?${params.toString()}`;
+            const base = getBase() + 'widget/overlay.html';
+            const p = new URLSearchParams({ theme });
+            if (ch) p.set('channel', ch);
+            finalLink.textContent = `${base}?${p.toString()}`;
         }
-
-        function copyLink() {
-            const text = finalLink.textContent;
-            if (text.startsWith('Isi')) return;
-            navigator.clipboard.writeText(text).then(() => {
-                copyBtn.textContent = '✓ Tersalin!';
-                copyBtn.classList.add('copied');
-                setTimeout(() => {
-                    copyBtn.textContent = 'Salin';
-                    copyBtn.classList.remove('copied');
-                }, 2000);
-            });
-        }
-
-        inStore.addEventListener('input', updateLink);
+        inChannel.addEventListener('input', updateLink);
         inTheme.addEventListener('change', updateLink);
         updateLink();
-    </script>
 
+        function copyLink() {
+            const t = finalLink.textContent;
+            if (t.includes('Isi')) return;
+            navigator.clipboard.writeText(t).then(() => flash('link-copy-btn'));
+        }
+
+        /* ── CSS StreamElements ── */
+        const seOutput = document.getElementById('se-css-output');
+        async function loadSeCss() {
+            const theme = document.getElementById('se-theme-select').value;
+            try {
+                const res = await fetch(`widget/themes/${theme}.css`);
+                const text = await res.text();
+                seOutput.value = text;
+            } catch {
+                seOutput.value = '/* Gagal memuat CSS. Buka file widget/themes/' + theme + '.css secara manual. */';
+            }
+        }
+        function copySeCss() {
+            navigator.clipboard.writeText(seOutput.value).then(() => flash('se-copy-btn'));
+        }
+        loadSeCss();
+
+        function flash(id) {
+            const btn = document.getElementById(id);
+            btn.textContent = '✓ Tersalin!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+        }
+    </script>
 </body>
 
 </html>
