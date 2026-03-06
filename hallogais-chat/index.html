@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="HalloGais Chat Widget — Katalog tema chat overlay untuk stream & website kamu." />
+    <title>HalloGais Chat Widget — Katalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ── RESET & TOKEN ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --p: #4F46E5;
+            --p2: #818CF8;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --border: #334155;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --success: #10b981;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── NAVBAR ── */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 48px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--p2);
+            letter-spacing: -0.3px;
+        }
+
+        .nav-brand span {
+            color: var(--text);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            text-align: center;
+            padding: 90px 24px 60px;
+            background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(79, 70, 229, 0.25), transparent);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid rgba(129, 140, 248, 0.4);
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--p2);
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: var(--p2);
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: var(--muted);
+            max-width: 520px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            padding: 13px 30px;
+            background: var(--p);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.35);
+        }
+
+        .hero-cta:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
+        }
+
+        /* ── SECTION HEADER ── */
+        .section {
+            padding: 60px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 15px;
+            margin-bottom: 36px;
+        }
+
+        /* ── TEMA GRID ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: var(--p);
+            box-shadow: 0 12px 40px rgba(79, 70, 229, 0.18);
+        }
+
+        .card-preview {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-preview.clean {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+        }
+
+        .card-preview.gaming {
+            background: linear-gradient(135deg, #0a0a14, #0d2b1a);
+        }
+
+        .card-preview.cute {
+            background: linear-gradient(135deg, #4a0028, #7c003c);
+        }
+
+        .card-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+        }
+
+        .card-preview img.loaded {
+            opacity: 1;
+        }
+
+        .card-body {
+            padding: 22px;
+        }
+
+        .card-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-bottom: 10px;
+        }
+
+        .tag-clean {
+            background: rgba(79, 70, 229, 0.2);
+            color: #818cf8;
+        }
+
+        .tag-gaming {
+            background: rgba(0, 255, 135, 0.12);
+            color: #00ff87;
+        }
+
+        .tag-cute {
+            background: rgba(255, 107, 174, 0.18);
+            color: #ff6bae;
+        }
+
+        .card-body h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .card-body p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 9px 20px;
+            background: var(--p);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+            transform: scale(1.02);
+        }
+
+        /* ── LINK GENERATOR ── */
+        .generator {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px 40px;
+            margin-top: 60px;
+        }
+
+        .generator h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .generator>p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .gen-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 7px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--p);
+        }
+
+        .field select option {
+            background: var(--surface);
+        }
+
+        .result-box {
+            background: rgba(16, 185, 129, 0.07);
+            border: 1.5px solid rgba(16, 185, 129, 0.25);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .result-box span {
+            flex: 1;
+            color: var(--success);
+            font-family: monospace;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1.5px solid rgba(16, 185, 129, 0.4);
+            color: var(--success);
+            border-radius: 7px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .copy-btn.copied {
+            color: #fff;
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            margin-top: 80px;
+        }
+
+        footer strong {
+            color: var(--p2);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 620px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .hero {
+                padding: 60px 16px 40px;
+            }
+
+            .generator {
+                padding: 24px 20px;
+            }
+
+            .gen-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-brand">Hallo<span>Gais</span> Chat</div>
+        <a href="#generator" class="btn" style="padding:8px 18px;font-size:13px;">Generate Link →</a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">✨ Widget Chat Kustom</div>
+        <h1>Chat Widget <span>Keren</span><br>Buat Stream & Website</h1>
+        <p>Pilih tema favoritmu, kustomisasi dengan nama tokomu, dan dapatkan link siap pakai dalam detik.</p>
+        <a href="#themes" class="hero-cta">Lihat Semua Tema ↓</a>
+    </section>
+
+    <!-- TEMA GRID -->
+    <div class="section" id="themes">
+        <div class="section-title">Pilih Tema</div>
+        <div class="section-sub">Klik "Demo Tema" untuk melihat langsung tampilan widget-nya.</div>
+
+        <div class="grid">
+
+            <!-- Clean Gais -->
+            <div class="card">
+                <div class="card-preview clean">🧼</div>
+                <div class="card-body">
+                    <div class="card-tag tag-clean">Profesional</div>
+                    <h3>Clean Gais</h3>
+                    <p>Tampilan bersih, minimalis, dan elegan. Cocok untuk toko umum, brand profesional, atau bisnis
+                        apapun.</p>
+                    <a href="widget/chat.html?theme=clean-gais" target="_blank" class="btn">Demo Tema →</a>
+                </div>
+            </div>
+
+            <!-- Gaming Gais -->
+            <div class="card">
+                <div class="card-preview gaming">🎮</div>
+                <div class="card-body">
+                    <div class="card-tag tag-gaming">Dark / Neon</div>
+                    <h3>Gaming Gais</h3>
+                    <p>Mode gelap bergaya neon hijau futuristik. Pas banget buat streamer, toko gaming, atau brand
+                        teknologi.</p>
+                    <a href="widget/chat.html?theme=gaming-gais" target="_blank" class="btn">Demo Tema →</a>
+                </div>
+            </div>
+
+            <!-- Cute Gais -->
+            <div class="card">
+                <div class="card-preview cute">🌸</div>
+                <div class="card-body">
+                    <div class="card-tag tag-cute">Kawaii / Pastel</div>
+                    <h3>Cute Gais</h3>
+                    <p>Warna pastel pink manis bergaya kawaii. Ideal untuk fashion wanita, toko aksesori, atau kosmetik.
+                    </p>
+                    <a href="widget/chat.html?theme=cute-gais" target="_blank" class="btn">Demo Tema →</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- LINK GENERATOR -->
+    <div class="section" id="generator">
+        <div class="generator">
+            <h2>🔗 Link Generator</h2>
+            <p>Isi nama toko dan pilih tema — link langsung otomatis terbuat untukmu.</p>
+
+            <div class="gen-fields">
+                <div class="field">
+                    <label for="in-store">Nama Toko / Channel</label>
+                    <input type="text" id="in-store" placeholder="Contoh: GameZone ID" />
+                </div>
+                <div class="field">
+                    <label for="in-theme">Tema Chat</label>
+                    <select id="in-theme">
+                        <option value="clean-gais">Clean Gais — Profesional</option>
+                        <option value="gaming-gais">Gaming Gais — Dark/Neon</option>
+                        <option value="cute-gais">Cute Gais — Kawaii</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <span id="final-link">Isi nama toko di atas untuk generate link...</span>
+                <button class="copy-btn" id="copy-btn" onclick="copyLink()">Salin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Dibuat dengan ❤️ oleh <strong>HalloGais</strong> · Chat Widget v1.0</p>
+    </footer>
+
+    <script>
+        const inStore = document.getElementById('in-store');
+        const inTheme = document.getElementById('in-theme');
+        const finalLink = document.getElementById('final-link');
+        const copyBtn = document.getElementById('copy-btn');
+
+        function getBaseUrl() {
+            // Ambil URL folder ini (hapus 'index.html' jika ada)
+            const href = window.location.href.split('?')[0].replace(/\/?$/, '/');
+            return href.endsWith('index.html')
+                ? href.replace('index.html', '')
+                : href;
+        }
+
+        function updateLink() {
+            const store = inStore.value.trim();
+            const theme = inTheme.value;
+            const base = getBaseUrl() + 'widget/chat.html';
+            const params = new URLSearchParams({ theme });
+            if (store) params.set('store', store);
+            finalLink.textContent = `${base}?${params.toString()}`;
+        }
+
+        function copyLink() {
+            const text = finalLink.textContent;
+            if (text.startsWith('Isi')) return;
+            navigator.clipboard.writeText(text).then(() => {
+                copyBtn.textContent = '✓ Tersalin!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = 'Salin';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        inStore.addEventListener('input', updateLink);
+        inTheme.addEventListener('change', updateLink);
+        updateLink();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="HalloGais Chat Widget - Customizable live chat for your store" />
+  <title>HalloGais Chat</title>
+
+  <!--
+    ================================================================
+    SISTEM PARAMETER (URL Query String)
+    ================================================================
+    Gunakan parameter berikut di URL untuk kustomisasi:
+
+    ?theme=clean-gais        → Pakai tema clean-gais.css (default)
+    ?theme=gaming-gais       → Pakai tema gaming-gais.css
+    ?theme=cute-gais         → Pakai tema cute-gais.css
+
+    ?store=NamaToko          → Nama toko yang ditampilkan di header
+    ?color=%23FF5733         → Warna aksen utama (hex, encode # jadi %23)
+    ?badge=1                 → Tampilkan badge logo HalloGais (1=ya, 0=tidak)
+
+    Contoh URL lengkap:
+    index.html?theme=gaming-gais&store=GameZone&color=%230ff&badge=1
+    ================================================================
+  -->
+
+  <!-- Tema CSS dimuat secara dinamis via JavaScript -->
+  <link id="theme-stylesheet" rel="stylesheet" href="" />
+</head>
+<body>
+
+  <!-- ===== WIDGET CHAT ===== -->
+  <div id="hallogais-chat-widget">
+
+    <!-- Header -->
+    <div id="chat-header">
+      <div id="chat-header-info">
+        <img id="chat-badge" src="assets/logo.png" alt="HalloGais Badge" />
+        <div>
+          <span id="chat-store-name">HalloGais Store</span>
+          <small id="chat-status">● Online</small>
+        </div>
+      </div>
+      <button id="chat-close-btn" aria-label="Tutup Chat">✕</button>
+    </div>
+
+    <!-- Area Pesan -->
+    <div id="chat-messages" role="log" aria-live="polite">
+      <!-- Balasan dan pesan akan muncul di sini -->
+      <div class="message bot-message">
+        <span>Halo! 👋 Ada yang bisa kami bantu?</span>
+      </div>
+    </div>
+
+    <!-- Input Pesan -->
+    <div id="chat-input-area">
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Ketik pesan..."
+        aria-label="Tulis pesan"
+        autocomplete="off"
+      />
+      <button id="chat-send-btn" aria-label="Kirim pesan">Kirim</button>
+    </div>
+
+  </div>
+
+  <!-- Tombol FAB untuk buka/tutup chat -->
+  <button id="chat-fab" aria-label="Buka Chat">💬</button>
+
+  <!-- ===== SCRIPT UTAMA ===== -->
+  <script>
+    // -------------------------------------------------------
+    // 1. Baca Parameter URL
+    // -------------------------------------------------------
+    const params = new URLSearchParams(window.location.search);
+
+    const theme  = params.get('theme')  || 'clean-gais';   // default tema
+    const store  = params.get('store')  || 'HalloGais Store';
+    const color  = params.get('color')  || null;            // hex warna aksen
+    const badge  = params.get('badge')  || '1';             // tampil badge?
+
+    // -------------------------------------------------------
+    // 2. Terapkan Tema CSS
+    // -------------------------------------------------------
+    const allowedThemes = ['clean-gais', 'gaming-gais', 'cute-gais'];
+    const safeTheme = allowedThemes.includes(theme) ? theme : 'clean-gais';
+    document.getElementById('theme-stylesheet').href = `themes/${safeTheme}.css`;
+
+    // -------------------------------------------------------
+    // 3. Terapkan Warna Aksen Custom (opsional)
+    // -------------------------------------------------------
+    if (color) {
+      document.documentElement.style.setProperty('--accent-color', decodeURIComponent(color));
+    }
+
+    // -------------------------------------------------------
+    // 4. Set Nama Toko
+    // -------------------------------------------------------
+    document.getElementById('chat-store-name').textContent = decodeURIComponent(store);
+
+    // -------------------------------------------------------
+    // 5. Toggle Badge Logo
+    // -------------------------------------------------------
+    if (badge === '0') {
+      document.getElementById('chat-badge').style.display = 'none';
+    }
+
+    // -------------------------------------------------------
+    // 6. Logika Buka / Tutup Widget
+    // -------------------------------------------------------
+    const widget = document.getElementById('hallogais-chat-widget');
+    const fab    = document.getElementById('chat-fab');
+    const closeBtn = document.getElementById('chat-close-btn');
+
+    fab.addEventListener('click', () => {
+      widget.classList.toggle('open');
+      fab.textContent = widget.classList.contains('open') ? '✕' : '💬';
+    });
+
+    closeBtn.addEventListener('click', () => {
+      widget.classList.remove('open');
+      fab.textContent = '💬';
+    });
+
+    // -------------------------------------------------------
+    // 7. Logika Kirim Pesan
+    // -------------------------------------------------------
+    const input    = document.getElementById('chat-input');
+    const sendBtn  = document.getElementById('chat-send-btn');
+    const msgArea  = document.getElementById('chat-messages');
+
+    function addMessage(text, type = 'user') {
+      const div = document.createElement('div');
+      div.className = `message ${type}-message`;
+      div.innerHTML = `<span>${text}</span>`;
+      msgArea.appendChild(div);
+      msgArea.scrollTop = msgArea.scrollHeight;
+    }
+
+    function handleSend() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage(text, 'user');
+      input.value = '';
+
+      // Balas otomatis sederhana (ganti dengan integrasi API nyata)
+      setTimeout(() => {
+        addMessage('Terima kasih! Admin kami akan segera membalas 😊', 'bot');
+      }, 800);
+    }
+
+    sendBtn.addEventListener('click', handleSend);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSend();
+    });
+  </script>
+
+</body>
+</html>

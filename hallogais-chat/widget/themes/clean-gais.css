@@ -1,0 +1,156 @@
+/* ============================================================
+   clean-gais.css — Tema: Bersih & Profesional
+   HalloGais Chat Widget
+   ============================================================ */
+
+/* --- Token Warna --- */
+:root {
+  --accent-color: #4F46E5;      /* Indigo elegan */
+  --accent-hover: #4338CA;
+  --bg-widget:    #FFFFFF;
+  --bg-header:    var(--accent-color);
+  --bg-messages:  #F9FAFB;
+  --bg-input:     #FFFFFF;
+  --text-header:  #FFFFFF;
+  --text-main:    #111827;
+  --text-muted:   #6B7280;
+  --bubble-user:  var(--accent-color);
+  --bubble-bot:   #E5E7EB;
+  --text-bubble-user: #FFFFFF;
+  --text-bubble-bot:  #111827;
+  --shadow:       0 8px 32px rgba(0,0,0,0.14);
+  --radius:       16px;
+  --font:         'Segoe UI', system-ui, sans-serif;
+}
+
+/* --- Reset Dasar --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); }
+
+/* --- FAB Tombol Buka Chat --- */
+#chat-fab {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: #fff;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.2s, transform 0.2s;
+  z-index: 9999;
+}
+#chat-fab:hover { background: var(--accent-hover); transform: scale(1.08); }
+
+/* --- Widget Utama --- */
+#hallogais-chat-widget {
+  position: fixed;
+  bottom: 92px; right: 24px;
+  width: 360px;
+  border-radius: var(--radius);
+  background: var(--bg-widget);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Tersembunyi secara default */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px) scale(0.97);
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 9998;
+}
+#hallogais-chat-widget.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+/* --- Header --- */
+#chat-header {
+  background: var(--bg-header);
+  color: var(--text-header);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#chat-header-info { display: flex; align-items: center; gap: 10px; }
+#chat-badge { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+#chat-store-name { font-weight: 700; font-size: 15px; display: block; }
+#chat-status { font-size: 11px; opacity: 0.85; }
+#chat-close-btn {
+  background: none; border: none;
+  color: #fff; font-size: 18px;
+  cursor: pointer; opacity: 0.8;
+  transition: opacity 0.2s;
+}
+#chat-close-btn:hover { opacity: 1; }
+
+/* --- Area Pesan --- */
+#chat-messages {
+  flex: 1;
+  background: var(--bg-messages);
+  padding: 16px;
+  overflow-y: auto;
+  min-height: 240px;
+  max-height: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* --- Balon Pesan --- */
+.message { display: flex; }
+.message span {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.user-message { justify-content: flex-end; }
+.user-message span {
+  background: var(--bubble-user);
+  color: var(--text-bubble-user);
+  border-bottom-right-radius: 4px;
+}
+.bot-message { justify-content: flex-start; }
+.bot-message span {
+  background: var(--bubble-bot);
+  color: var(--text-bubble-bot);
+  border-bottom-left-radius: 4px;
+}
+
+/* --- Area Input --- */
+#chat-input-area {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--bg-input);
+  border-top: 1px solid #E5E7EB;
+}
+#chat-input {
+  flex: 1;
+  border: 1.5px solid #D1D5DB;
+  border-radius: 10px;
+  padding: 9px 13px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#chat-input:focus { border-color: var(--accent-color); }
+#chat-send-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#chat-send-btn:hover { background: var(--accent-hover); }
