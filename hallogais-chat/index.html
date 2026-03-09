@@ -429,7 +429,7 @@
 
         #preview-feed {
             flex: 1;
-            overflow: hidden;
+            overflow: clip;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -452,11 +452,41 @@
 
         .prev-sc {
             display: block;
-            overflow: hidden;
+            /* overflow:hidden dihapus — supaya konten tidak terpotong */
             margin-bottom: 8px;
             border-radius: 8px;
             animation: msgIn .35s ease forwards;
-            opacity: 0
+            opacity: 0;
+            flex-shrink: 0
+        }
+
+        /* Animasi keluar pesan lama */
+        @keyframes msgOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+                max-height: 200px;
+                margin-bottom: 8px;
+            }
+
+            70% {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            100% {
+                opacity: 0;
+                max-height: 0;
+                margin-bottom: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        }
+
+        .msg-fading-out {
+            animation: msgOut 0.5s ease forwards !important;
+            pointer-events: none;
+            overflow: hidden;
         }
 
         .prev-avatar {
@@ -742,7 +772,7 @@
 
     <nav>
         <div class="brand">Hallo<em>Gais</em></div>
-        <div><span class="pill">CSS Generator v2.0</span></div>
+        <div><span class="pill">CSS Generator <v0 class="1"></v0></span></div>
     </nav>
 
     <div class="hero">
@@ -803,6 +833,11 @@
                             <input type="text" id="ctrl-border-color-txt" value="#4F46E5"
                                 oninput="syncTC('ctrl-border-color','ctrl-border-color-txt');gen()">
                         </div>
+                    </div>
+                    <div class="toggle-row">
+                        <label>Tampilkan Border</label>
+                        <label class="toggle"><input type="checkbox" id="ctrl-border-enabled" checked
+                                onchange="gen()"><span class="toggle-slider"></span></label>
                     </div>
                     <div class="toggle-row">
                         <label>Username Warna-warni</label>
@@ -882,6 +917,11 @@
                         <input type="range" id="ctrl-gap" min="0" max="20" value="6"
                             oninput="sync('lbl-gap',this.value+'px');gen()">
                     </div>
+                    <div class="toggle-row">
+                        <label>Lebar Bubble Auto-Fit</label>
+                        <label class="toggle"><input type="checkbox" id="ctrl-fit-content" onchange="gen()"><span
+                                class="toggle-slider"></span></label>
+                    </div>
                 </div>
             </div>
 
@@ -919,6 +959,9 @@
                     <div class="toggle-row"><label>Badge (🛡👑✅⭐)</label><label class="toggle"><input type="checkbox"
                                 id="ctrl-show-badge" checked onchange="gen()"><span
                                 class="toggle-slider"></span></label></div>
+                    <div class="toggle-row"><label>Background Bubble</label><label class="toggle"><input type="checkbox"
+                                id="ctrl-show-bg" checked onchange="gen()"><span class="toggle-slider"></span></label>
+                    </div>
                     <div class="toggle-row"><label>Transparan OBS</label><label class="toggle"><input type="checkbox"
                                 id="ctrl-transparent" checked onchange="gen()"><span
                                 class="toggle-slider"></span></label></div>
@@ -1042,14 +1085,14 @@
            PRESETS
         ═══════════════════════════════════ */
         const PRESETS = {
-            clean: { bgColor: '#0f0f1a', bgOpacity: 70, textColor: '#f0f0f0', borderColor: '#4F46E5', borderW: 3, bubble: 'normal', radius: 8, padV: 7, padH: 11, gap: 6, font: 'Inter', fontSize: 14, nameSize: 13, anim: 'fadeUp', animDur: 35, coloredNames: true, shadow: true, showAvatar: true, showTime: false, showBadge: true, transparent: true, overallOpacity: 100 },
-            gaming: { bgColor: '#0a0a14', bgOpacity: 82, textColor: '#d0ffd0', borderColor: '#00FF87', borderW: 3, bubble: 'normal', radius: 6, padV: 8, padH: 12, gap: 5, font: 'Rajdhani', fontSize: 15, nameSize: 15, anim: 'slideLeft', animDur: 28, coloredNames: false, shadow: true, showAvatar: false, showTime: false, showBadge: true, transparent: true, overallOpacity: 100 },
-            cute: { bgColor: '#280a1c', bgOpacity: 78, textColor: '#ffe8f5', borderColor: '#FF6BAE', borderW: 2, bubble: 'cloud', radius: 16, padV: 9, padH: 14, gap: 7, font: 'Nunito', fontSize: 14, nameSize: 14, anim: 'bounce', animDur: 40, coloredNames: true, shadow: true, showAvatar: true, showTime: false, showBadge: true, transparent: true, overallOpacity: 100 },
-            cyberpunk: { bgColor: '#0d001a', bgOpacity: 88, textColor: '#00ff9f', borderColor: '#ff00ff', borderW: 2, bubble: 'sharp', radius: 0, padV: 7, padH: 12, gap: 4, font: 'Oxanium', fontSize: 14, nameSize: 13, anim: 'glitch', animDur: 25, coloredNames: false, shadow: true, showAvatar: false, showTime: false, showBadge: true, transparent: true, overallOpacity: 100 },
-            horror: { bgColor: '#1a0000', bgOpacity: 90, textColor: '#c9a0a0', borderColor: '#8b0000', borderW: 2, bubble: 'normal', radius: 4, padV: 7, padH: 11, gap: 5, font: 'Creepster', fontSize: 16, nameSize: 15, anim: 'fadeIn', animDur: 55, coloredNames: false, shadow: true, showAvatar: false, showTime: false, showBadge: true, transparent: true, overallOpacity: 100 },
-            minecraft: { bgColor: '#2d2000', bgOpacity: 90, textColor: '#ffe100', borderColor: '#5a3a1a', borderW: 2, bubble: 'sharp', radius: 0, padV: 5, padH: 8, gap: 3, font: "'Press Start 2P'", fontSize: 11, nameSize: 10, anim: 'none', animDur: 20, coloredNames: true, shadow: false, showAvatar: false, showTime: false, showBadge: true, transparent: true, overallOpacity: 100 },
-            minimal: { bgColor: '#000000', bgOpacity: 0, textColor: '#ffffff', borderColor: 'transparent', borderW: 0, bubble: 'frameless', radius: 4, padV: 3, padH: 6, gap: 2, font: 'Inter', fontSize: 13, nameSize: 12, anim: 'fadeIn', animDur: 25, coloredNames: true, shadow: false, showAvatar: false, showTime: false, showBadge: false, transparent: true, overallOpacity: 100 },
-            dark: { bgColor: '#000000', bgOpacity: 85, textColor: '#e2e8f0', borderColor: '#334155', borderW: 1, bubble: 'sms', radius: 8, padV: 7, padH: 11, gap: 5, font: 'Poppins', fontSize: 13, nameSize: 12, anim: 'fadeUp', animDur: 35, coloredNames: true, shadow: false, showAvatar: true, showTime: true, showBadge: true, transparent: true, overallOpacity: 95 },
+            clean: { bgColor: '#0f0f1a', bgOpacity: 70, textColor: '#f0f0f0', borderColor: '#4F46E5', borderEnabled: true, borderW: 3, bubble: 'normal', radius: 8, padV: 7, padH: 11, gap: 6, font: 'Inter', fontSize: 14, nameSize: 13, anim: 'fadeUp', animDur: 35, coloredNames: true, shadow: true, showAvatar: true, showTime: false, showBadge: true, transparent: true, showBg: true, fitContent: false, overallOpacity: 100 },
+            gaming: { bgColor: '#0a0a14', bgOpacity: 82, textColor: '#d0ffd0', borderColor: '#00FF87', borderEnabled: true, borderW: 3, bubble: 'normal', radius: 6, padV: 8, padH: 12, gap: 5, font: 'Rajdhani', fontSize: 15, nameSize: 15, anim: 'slideLeft', animDur: 28, coloredNames: false, shadow: true, showAvatar: false, showTime: false, showBadge: true, transparent: true, showBg: true, fitContent: false, overallOpacity: 100 },
+            cute: { bgColor: '#280a1c', bgOpacity: 78, textColor: '#ffe8f5', borderColor: '#FF6BAE', borderEnabled: true, borderW: 2, bubble: 'cloud', radius: 16, padV: 9, padH: 14, gap: 7, font: 'Nunito', fontSize: 14, nameSize: 14, anim: 'bounce', animDur: 40, coloredNames: true, shadow: true, showAvatar: true, showTime: false, showBadge: true, transparent: true, showBg: true, fitContent: false, overallOpacity: 100 },
+            cyberpunk: { bgColor: '#0d001a', bgOpacity: 88, textColor: '#00ff9f', borderColor: '#ff00ff', borderEnabled: true, borderW: 2, bubble: 'sharp', radius: 0, padV: 7, padH: 12, gap: 4, font: 'Oxanium', fontSize: 14, nameSize: 13, anim: 'glitch', animDur: 25, coloredNames: false, shadow: true, showAvatar: false, showTime: false, showBadge: true, transparent: true, showBg: true, fitContent: false, overallOpacity: 100 },
+            horror: { bgColor: '#1a0000', bgOpacity: 90, textColor: '#c9a0a0', borderColor: '#8b0000', borderEnabled: true, borderW: 2, bubble: 'normal', radius: 4, padV: 7, padH: 11, gap: 5, font: 'Creepster', fontSize: 16, nameSize: 15, anim: 'fadeIn', animDur: 55, coloredNames: false, shadow: true, showAvatar: false, showTime: false, showBadge: true, transparent: true, showBg: true, fitContent: false, overallOpacity: 100 },
+            minecraft: { bgColor: '#2d2000', bgOpacity: 90, textColor: '#ffe100', borderColor: '#5a3a1a', borderEnabled: true, borderW: 2, bubble: 'sharp', radius: 0, padV: 5, padH: 8, gap: 3, font: "'Press Start 2P'", fontSize: 11, nameSize: 10, anim: 'none', animDur: 20, coloredNames: true, shadow: false, showAvatar: false, showTime: false, showBadge: true, transparent: true, showBg: true, fitContent: false, overallOpacity: 100 },
+            minimal: { bgColor: '#000000', bgOpacity: 0, textColor: '#ffffff', borderColor: 'transparent', borderEnabled: false, borderW: 0, bubble: 'frameless', radius: 4, padV: 3, padH: 6, gap: 2, font: 'Inter', fontSize: 13, nameSize: 12, anim: 'fadeIn', animDur: 25, coloredNames: true, shadow: false, showAvatar: false, showTime: false, showBadge: false, transparent: true, showBg: false, fitContent: false, overallOpacity: 100 },
+            dark: { bgColor: '#000000', bgOpacity: 85, textColor: '#e2e8f0', borderColor: '#334155', borderEnabled: true, borderW: 1, bubble: 'sms', radius: 8, padV: 7, padH: 11, gap: 5, font: 'Poppins', fontSize: 13, nameSize: 12, anim: 'fadeUp', animDur: 35, coloredNames: true, shadow: false, showAvatar: true, showTime: true, showBadge: true, transparent: true, showBg: true, fitContent: false, overallOpacity: 95 },
         };
 
         /* ═══════════════════════════════════
@@ -1106,6 +1149,7 @@
             return {
                 bgColor: v('ctrl-bg-color'), bgOpacity: +v('ctrl-bg-opacity'),
                 textColor: v('ctrl-text-color'), borderColor: v('ctrl-border-color'),
+                borderEnabled: chk('ctrl-border-enabled'),
                 borderW: +v('ctrl-border-w'), radius: +v('ctrl-radius'),
                 bubble: v('ctrl-bubble'),
                 padV: +v('ctrl-pad-v'), padH: +v('ctrl-pad-h'), gap: +v('ctrl-gap'),
@@ -1114,6 +1158,7 @@
                 coloredNames: chk('ctrl-colored-names'), shadow: chk('ctrl-shadow'),
                 showAvatar: chk('ctrl-show-avatar'), showTime: chk('ctrl-show-time'),
                 showBadge: chk('ctrl-show-badge'), transparent: chk('ctrl-transparent'),
+                showBg: chk('ctrl-show-bg'), fitContent: chk('ctrl-fit-content'),
                 overallOpacity: +v('ctrl-overall-opacity'),
             };
         }
@@ -1146,6 +1191,7 @@
             s('ctrl-bg-opacity', p.bgOpacity); sync('lbl-bg-opacity', p.bgOpacity + '%');
             s('ctrl-text-color', p.textColor); syncCT('ctrl-text-color', 'ctrl-text-color-txt');
             s('ctrl-border-color', p.borderColor); syncCT('ctrl-border-color', 'ctrl-border-color-txt');
+            $('ctrl-border-enabled').checked = p.borderEnabled !== false;
             s('ctrl-border-w', p.borderW); sync('lbl-border-w', p.borderW + 'px');
             s('ctrl-bubble', p.bubble);
             s('ctrl-radius', p.radius); sync('lbl-radius', p.radius + 'px');
@@ -1163,6 +1209,8 @@
             $('ctrl-show-time').checked = p.showTime;
             $('ctrl-show-badge').checked = p.showBadge;
             $('ctrl-transparent').checked = p.transparent;
+            $('ctrl-show-bg').checked = p.showBg !== false;
+            $('ctrl-fit-content').checked = !!p.fitContent;
             s('ctrl-overall-opacity', p.overallOpacity); sync('lbl-overall-opacity', p.overallOpacity + '%');
             updatePreviewAnim();
             resetPreview();
@@ -1178,15 +1226,19 @@
             const uc = p.coloredNames ? (s.color || nameColor(s.user)) : p.textColor;
             const bgRgb = hexRgb(p.bgColor);
             const br = getBubbleRadius(p.bubble, p.radius);
-            const bg = p.bubble === 'frameless' ? 'transparent' : `rgba(${bgRgb},${p.bgOpacity / 100})`;
-            const bl = p.bubble === 'frameless' ? 'none' : `${p.borderW}px solid ${p.borderColor}`;
-            const sh = p.shadow && p.bubble !== 'frameless' ? '0 2px 12px rgba(0,0,0,.4)' : 'none';
+            const showBgReal = p.showBg && p.bubble !== 'frameless';
+            const bg = showBgReal ? `rgba(${bgRgb},${p.bgOpacity / 100})` : 'transparent';
+            const borderActive = p.borderEnabled && p.bubble !== 'frameless' && p.borderW > 0;
+            const bl = borderActive ? `${p.borderW}px solid ${p.borderColor}` : 'none';
+            const sh = p.shadow && showBgReal ? '0 2px 12px rgba(0,0,0,.4)' : 'none';
             const av = p.showAvatar ? `<div class="prev-avatar" style="background:linear-gradient(135deg,${uc},${uc}88)">${s.user[0]}</div>` : '';
             const bd = p.showBadge && s.badges.length ? s.badges.map(b => `<span class="prev-badge">${b}</span>`).join('') : '';
             const tm = p.showTime ? `<span class="prev-time">${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>` : '';
+            /* fit-content: gunakan align-self agar tetap flex tapi tidak stretch full width */
+            const alignSelf = p.fitContent ? 'align-self:flex-start;' : '';
             const el = document.createElement('div');
             el.className = 'prev-msg';
-            el.style.cssText = `background:${bg};border-radius:${br};padding:${p.padV}px ${p.padH}px;margin-bottom:${p.gap}px;border-left:${bl};box-shadow:${sh};opacity:${p.overallOpacity / 100};font-family:${p.font},sans-serif;`;
+            el.style.cssText = `${alignSelf}background:${bg};border-radius:${br};padding:${p.padV}px ${p.padH}px;margin-bottom:${p.gap}px;border-left:${bl};box-shadow:${sh};opacity:${p.overallOpacity / 100};font-family:${p.font},sans-serif;`;
             el.innerHTML = `${av}<div class="prev-body"><div class="prev-meta">${bd}<span class="prev-name" style="color:${uc};font-size:${p.nameSize}px">${s.user}</span>${tm}</div><div class="prev-text" style="color:${p.textColor};font-size:${p.fontSize}px">${s.text}</div></div>`;
             return el;
         }
@@ -1194,11 +1246,13 @@
         function buildSC(s, p) {
             const t = SC_TIERS[s.type];
             const br = p.radius + 'px';
+            const alignSelf = p.fitContent ? 'align-self:flex-start;' : '';
             const el = document.createElement('div');
             el.className = 'prev-sc';
-            el.style.cssText = `border-radius:${br};margin-bottom:${p.gap + 4}px;box-shadow:0 4px 18px rgba(0,0,0,.5);overflow:hidden;`;
+            /* overflow hidden hanya di child sc-header/sc-body bukan wrapper agar tidak terpotong */
+            el.style.cssText = `${alignSelf}border-radius:${br};margin-bottom:${p.gap + 4}px;box-shadow:0 4px 18px rgba(0,0,0,.5);opacity:${p.overallOpacity / 100};`;
             el.innerHTML = `
-    <div class="sc-header" style="background:${t.header}">
+    <div class="sc-header" style="background:${t.header};border-radius:${br} ${br} 0 0;overflow:hidden">
       <div class="sc-av">${s.user[0]}</div>
       <div style="flex:1">
         <div style="color:#fff;font-weight:700;font-size:${p.nameSize}px;font-family:${p.font},sans-serif;line-height:1.1">${s.user}</div>
@@ -1206,7 +1260,7 @@
       </div>
       <div class="sc-label">${t.label}</div>
     </div>
-    <div class="sc-body" style="background:${t.bg}">
+    <div class="sc-body" style="background:${t.bg};border-radius:0 0 ${br} ${br};padding:8px 12px">
       <div style="color:rgba(255,255,255,.9);font-size:${p.fontSize}px;line-height:1.45;font-family:${p.font},sans-serif">${s.text}</div>
     </div>`;
             return el;
@@ -1217,6 +1271,19 @@
         ═══════════════════════════════════ */
         let _timer = null, _nIdx = 0;
         const MAX_MSG = 8;
+        /* Berapa detik sebelum pesan lama dihapus (dalam ms) */
+        const MSG_LIFETIME = 7000;
+
+        /* Jadwalkan fade-out + removal untuk satu elemen */
+        function scheduleFadeOut(el) {
+            setTimeout(() => {
+                if (!el.parentNode) return;           // sudah dihapus sebelumnya
+                el.classList.add('msg-fading-out');   // mulai animasi keluar
+                setTimeout(() => {
+                    if (el.parentNode) el.parentNode.removeChild(el);
+                }, 520);                              // tunggu animasi selesai (0.5s)
+            }, MSG_LIFETIME);
+        }
 
         function tick() {
             _timer = setTimeout(() => {
@@ -1224,7 +1291,10 @@
                 const s = NON_INIT[_nIdx % NON_INIT.length]; _nIdx++;
                 const el = buildEl(s); el.dataset.si = SAMPLES.indexOf(s);
                 feed.appendChild(el);
+                /* Batasi pesan maksimal di feed dengan hapus tertua */
                 while (feed.children.length > MAX_MSG) feed.removeChild(feed.firstChild);
+                /* Jadwalkan fade-out otomatis untuk pesan baru ini */
+                scheduleFadeOut(el);
                 tick();
             }, 2000 + Math.random() * 2000);
         }
@@ -1235,7 +1305,8 @@
             const feed = $('preview-feed'); feed.innerHTML = '';
             SAMPLES.filter(s => s.init).forEach(s => {
                 const el = buildEl(s);
-                el.style.animation = 'none'; el.style.opacity = '1';
+                el.style.animation = 'none';
+                /* opacity sudah di-set oleh buildEl, jangan di-override */
                 el.dataset.si = SAMPLES.indexOf(s);
                 feed.appendChild(el);
             });
@@ -1247,9 +1318,13 @@
             const feed = $('preview-feed');
             Array.from(feed.children).forEach(el => {
                 const si = el.dataset.si; if (si === undefined) return;
+                /* Jangan rebuild elemen yang sedang fade-out */
+                if (el.classList.contains('msg-fading-out')) return;
                 const ne = buildEl(SAMPLES[+si]);
-                ne.style.animation = 'none'; ne.style.opacity = '1';
+                ne.style.animation = 'none';
+                /* opacity sudah di-set oleh buildEl, jangan di-override */
                 ne.dataset.si = si;
+                /* Salin countdown fade-out: transfer sisa waktu tidak praktis, biarkan tetap di DOM */
                 feed.replaceChild(ne, el);
             });
         }
@@ -1266,9 +1341,12 @@
             const bgR = hexRgb(p.bgColor), bgO = (p.bgOpacity / 100).toFixed(2);
             const anim = (ANIM_KF[p.anim] || ANIM_KF.fadeUp)('hg-in');
             const br = getBubbleRadius(p.bubble, p.radius);
-            const bg = getBubbleBg(p.bubble, bgR, bgO);
-            const sh = p.shadow ? 'box-shadow:0 2px 14px rgba(0,0,0,.4) !important;' : '';
-            const bl = p.borderW > 0 && p.bubble !== 'frameless' ? `border-left:${p.borderW}px solid ${p.borderColor} !important;` : '';
+            const showBgReal = p.showBg && p.bubble !== 'frameless';
+            const bg = showBgReal ? `rgba(${bgR},${bgO})` : 'transparent';
+            const sh = p.shadow && showBgReal ? 'box-shadow:0 2px 14px rgba(0,0,0,.4) !important;' : '';
+            const borderActive = p.borderEnabled && p.borderW > 0 && p.bubble !== 'frameless';
+            const bl = borderActive ? `border-left:${p.borderW}px solid ${p.borderColor} !important;` : '';
+            const fitC = p.fitContent ? 'display:table !important;' : '';
             const avC = !p.showAvatar ? '\n/* Sembunyikan avatar */\n#author-photo{display:none !important;}' : '';
             const tmC = !p.showTime ? '\n/* Sembunyikan timestamp */\n#timestamp{display:none !important;}' : '';
             const bdC = !p.showBadge ? '\n/* Sembunyikan badge */\nyt-live-chat-author-badge-renderer{display:none !important;}' : '';
@@ -1301,8 +1379,8 @@ yt-live-chat-text-message-renderer {
   margin-bottom:${p.gap}px !important;
   opacity:${(p.overallOpacity / 100).toFixed(2)} !important;
   animation:hg-in ${p.animDur.toFixed(2)}s ease forwards !important;
-  ${bl}${sh}
-}
+  ${fitC}${bl}${sh}
+}${!showBgReal && p.bubble !== 'frameless' ? '\n/* Background bubble dinonaktifkan */\nyt-live-chat-text-message-renderer{background:transparent !important;}' : ''}
 
 /* Username */
 #author-name,
