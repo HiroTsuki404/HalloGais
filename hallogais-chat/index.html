@@ -945,6 +945,16 @@
                         <input type="range" id="ctrl-anim-dur" min="10" max="120" value="35"
                             oninput="sync('lbl-anim-dur',(this.value/100).toFixed(2)+'s');onAnimChange()">
                     </div>
+                    <div class="toggle-row">
+                        <label>Pesan Auto-Hilang</label>
+                        <label class="toggle"><input type="checkbox" id="ctrl-auto-fade" onchange="gen()"><span
+                                class="toggle-slider"></span></label>
+                    </div>
+                    <div class="ctrl-row" id="row-fade-dur">
+                        <label>Durasi Tampil <span id="lbl-fade-dur">5 detik</span></label>
+                        <input type="range" id="ctrl-fade-dur" min="1" max="10" value="5"
+                            oninput="sync('lbl-fade-dur',this.value+' detik')">
+                    </div>
                 </div>
             </div>
 
@@ -1271,18 +1281,18 @@
         ═══════════════════════════════════ */
         let _timer = null, _nIdx = 0;
         const MAX_MSG = 8;
-        /* Berapa detik sebelum pesan lama dihapus (dalam ms) */
-        const MSG_LIFETIME = 7000;
 
-        /* Jadwalkan fade-out + removal untuk satu elemen */
+        /* Jadwalkan fade-out + removal untuk satu elemen (cek toggle dulu) */
         function scheduleFadeOut(el) {
+            if (!chk('ctrl-auto-fade')) return;       // fitur dimatikan, skip
+            const lifetime = (+v('ctrl-fade-dur')) * 1000;
             setTimeout(() => {
                 if (!el.parentNode) return;           // sudah dihapus sebelumnya
                 el.classList.add('msg-fading-out');   // mulai animasi keluar
                 setTimeout(() => {
                     if (el.parentNode) el.parentNode.removeChild(el);
                 }, 520);                              // tunggu animasi selesai (0.5s)
-            }, MSG_LIFETIME);
+            }, lifetime);
         }
 
         function tick() {
@@ -1294,7 +1304,7 @@
                 /* Batasi pesan maksimal di feed dengan hapus tertua */
                 while (feed.children.length > MAX_MSG) feed.removeChild(feed.firstChild);
                 /* Jadwalkan fade-out otomatis untuk pesan baru ini */
-                scheduleFadeOut(el);
+                scheduleFadeOut(el); /* hanya fade jika toggle aktif */
                 tick();
             }, 2000 + Math.random() * 2000);
         }
